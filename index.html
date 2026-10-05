@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ScamShield — Smart Scam & Verification Platform</title>
+  <meta name="description" content="When in doubt, check it out. Verify messages, phone calls, and photos for scams in seconds.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand">
+        <span class="shield-badge">🛡️</span>
+        <div class="brand-info">
+          <span class="brand-name">ScamShield</span>
+          <span class="brand-tag">Instant Verification Grid</span>
+        </div>
+      </div>
+      <div class="nav-actions">
+        <button id="modeToggleBtn" class="pill-btn" title="Toggle Demo / Live AI mode">
+          <span class="dot-status"></span>
+          <span id="modeText">Demo Mode: <strong>Active</strong></span>
+        </button>
+        <button id="settingsBtn" class="icon-btn" title="API Key Settings">⚙️</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-container">
+    <section class="hero-section">
+      <div class="badge-pill">🔒 Accurate Citizen Verification</div>
+      <h1 class="hero-title">When in doubt, <span class="highlight">check it out.</span></h1>
+      <p class="hero-subtitle">Instantly verify if a message, phone call, or photo is a <strong>dangerous scam</strong> or <strong>genuine & safe</strong>.</p>
+      <div class="tab-bar">
+        <button class="tab-item active" data-tab="text-panel">
+          <span class="tab-emoji">💬</span>
+          <span class="tab-label">Check Message / SMS</span>
+        </button>
+        <button class="tab-item" data-tab="call-panel">
+          <span class="tab-emoji">🎙️</span>
+          <span class="tab-label">Check Phone Call</span>
+        </button>
+        <button class="tab-item" data-tab="image-panel">
+          <span class="tab-emoji">🖼️</span>
+          <span class="tab-label">Check Photo / ID</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="workspace-area">
+      <!-- TAB 1: TEXT SHIELD -->
+      <div id="text-panel" class="tab-panel active">
+        <div class="clean-card">
+          <div class="card-top">
+            <div class="card-title-group">
+              <h3>Check SMS, WhatsApp message, or Link</h3>
+              <p class="card-subtitle">Paste any message below to accurately verify if it is legitimate or a scam.</p>
+            </div>
+            <div class="preset-group">
+              <span class="preset-label">Test Samples:</span>
+              <div class="preset-buttons">
+                <button class="btn-sample danger-chip" data-preset="electricity">🚨 Fake: Power Cut SMS</button>
+                <button class="btn-sample danger-chip" data-preset="kyc">🚨 Fake: Bank KYC Phish</button>
+                <button class="btn-sample danger-chip" data-preset="job_scam">🚨 Fake: Telegram Job</button>
+                <button class="btn-sample safe" data-preset="safe_amazon">✅ Real: Amazon OTP</button>
+                <button class="btn-sample safe" data-preset="safe_doctor">✅ Real: Clinic Appointment</button>
+                <button class="btn-sample safe" data-preset="safe_family">✅ Real: Family Chat</button>
+              </div>
+            </div>
+          </div>
+          <div class="input-container">
+            <textarea id="textInputArea" placeholder="Type or paste any SMS, WhatsApp message, email, or URL here..."></textarea>
+            <div class="input-helper">
+              <span id="textCharCount">0 characters</span>
+              <span id="heuristicHint" class="helper-hint"></span>
+            </div>
+          </div>
+          <div class="card-bottom">
+            <button id="clearTextBtn" class="btn-secondary">Clear Input</button>
+            <button id="analyzeTextBtn" class="btn-primary"><span>🔍 Check This Message</span></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: CALL SHIELD -->
+      <div id="call-panel" class="tab-panel">
+        <div class="clean-card">
+          <div class="card-top">
+            <div class="card-title-group">
+              <h3>Check a Phone Call Conversation</h3>
+              <p class="card-subtitle">Record live audio using your microphone, or test realistic call scenarios.</p>
+            </div>
+            <div class="preset-group">
+              <span class="preset-label">Test Samples:</span>
+              <div class="preset-buttons">
+                <button class="btn-sample danger-chip" data-preset="digital_arrest">🚨 Fake: Police Digital Arrest</button>
+                <button class="btn-sample danger-chip" data-preset="tech_support">🚨 Fake: AnyDesk Support</button>
+                <button class="btn-sample danger-chip" data-preset="bank_otp">🚨 Fake: Bank Asking for OTP</button>
+                <button class="btn-sample safe" data-preset="safe_delivery">✅ Real: Delivery Rider</button>
+                <button class="btn-sample safe" data-preset="safe_bank_advisory">✅ Real: Official Bank Alert</button>
+              </div>
+            </div>
+          </div>
+          <div class="call-layout">
+            <div class="voice-box">
+              <button id="micRecordBtn" class="mic-button" title="Click to start/stop live mic recording">
+                <div class="mic-icon">🎙️</div>
+              </button>
+              <span id="micStatusText" class="mic-label">Click mic to record live voice</span>
+              <canvas id="waveformCanvas" width="220" height="35"></canvas>
+            </div>
+            <div class="transcript-box">
+              <div class="transcript-top">
+                <span class="box-label">Live Call Transcript:</span>
+                <button id="clearTranscriptBtn" class="btn-text-only">Clear</button>
+              </div>
+              <textarea id="liveTranscriptArea" placeholder="Words will appear here in real-time as you speak into the mic, or select a sample above..."></textarea>
+            </div>
+          </div>
+          <div class="card-bottom">
+            <span class="helper-text">💡 Accurate detection for both genuine customer service calls and fraud extortion calls.</span>
+            <button id="analyzeCallBtn" class="btn-primary"><span>🔍 Check This Call</span></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: IMAGE SHIELD -->
+      <div id="image-panel" class="tab-panel">
+        <div class="clean-card">
+          <div class="card-top">
+            <div class="card-title-group">
+              <h3>Check a Photo, ID Card, or Document</h3>
+              <p class="card-subtitle">Upload any image to test if it is a genuine real document or an AI-generated/altered fake.</p>
+            </div>
+            <div class="preset-group">
+              <span class="preset-label">Test Samples:</span>
+              <div class="preset-buttons">
+                <button class="btn-sample danger-chip" data-preset="deepfake">🚨 Fake: AI Deepfake Face</button>
+                <button class="btn-sample danger-chip" data-preset="fake_doc">🚨 Fake: Altered Slip</button>
+                <button class="btn-sample safe" data-preset="authentic_id">✅ Real: Authentic ID Card</button>
+                <button class="btn-sample safe" data-preset="authentic_receipt">✅ Real: Store Receipt</button>
+              </div>
+            </div>
+          </div>
+          <div class="upload-area">
+            <input type="file" id="imageFileInput" accept="image/png, image/jpeg, image/webp" style="display: none;">
+            <div id="dropZone" class="upload-dropzone">
+              <div id="dropPrompt" class="upload-prompt">
+                <div class="upload-icon">📁</div>
+                <p class="upload-title">Click to upload photo, or drag and drop here</p>
+                <p class="upload-desc">Supports JPG, PNG, WEBP — Scans for authentic security features or AI artifacts</p>
+              </div>
+              <div id="imagePreviewArea" class="preview-box" style="display: none;">
+                <canvas id="imageCanvas"></canvas>
+                <div class="preview-actions">
+                  <span id="imageMetaTag" class="file-name">sample-image.jpg</span>
+                  <button id="removeImageBtn" class="btn-secondary small">Remove Photo</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-bottom">
+            <span class="helper-text">💡 Differentiates between authentic physical IDs and synthetic AI deepfakes.</span>
+            <button id="analyzeImageBtn" class="btn-primary"><span>🔍 Check This Photo</span></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACCURATE RESULTS CARD -->
+    <section id="resultsSection" class="results-container" style="display: none;">
+      <div id="laserScanner" class="loading-bar"></div>
+      <div class="verdict-card" id="verdictCard">
+        <div class="verdict-header">
+          <div class="verdict-status-box">
+            <div class="status-icon-circle" id="statusIconCircle">🚨</div>
+            <div class="status-text-group">
+              <div class="verdict-pill" id="verdictPill">DANGEROUS SCAM</div>
+              <h2 id="verdictHeadline" class="verdict-title">Fake Electricity Bill Scam</h2>
+              <p id="verdictSummary" class="verdict-explanation">A scammer is pretending to be the electricity office to scare you into sending money.</p>
+            </div>
+          </div>
+          <div class="simple-meter-box">
+            <span class="meter-label">Scam Risk</span>
+            <div class="meter-number-row">
+              <span id="scoreValue" class="meter-val">94</span><span class="meter-pct">%</span>
+            </div>
+            <div class="meter-progress-track">
+              <div id="meterProgressBar" class="meter-progress-fill"></div>
+            </div>
+            <span id="meterRiskText" class="meter-verdict-label">High Danger</span>
+          </div>
+        </div>
+
+        <div class="verdict-details-grid">
+          <div class="detail-box">
+            <h4 class="box-heading" id="indicatorsHeading">🚩 Key Verification Findings</h4>
+            <div id="indicatorsContainer" class="red-flags-list"></div>
+            <div class="flagged-words-box" id="snippetsBlock">
+              <span class="flagged-words-label" id="snippetsLabel">Key phrases detected:</span>
+              <div id="snippetsContainer" class="flagged-chips"></div>
+            </div>
+          </div>
+          <div class="detail-box action-box">
+            <h4 class="box-heading" id="actionsHeading">🛡️ Recommended Next Steps:</h4>
+            <ul id="actionsChecklist" class="simple-actions-list"></ul>
+            <div class="help-box" id="helpBannerBox">
+              <div class="help-icon">📞</div>
+              <div class="help-text">
+                <strong>Need Help? Call 1930</strong>
+                <span>Official National Cybercrime Reporting Helpline (Free)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-wrap">
+      <span>ScamShield — "When in doubt, check it out"</span>
+      <!--<span class="footer-sub">College Frontend Competition 2026</span>-->
+    </div>
+  </footer>
+
+  <div id="settingsModal" class="modal-backdrop" style="display: none;">
+    <div class="modal-box">
+      <div class="modal-top">
+        <h3>⚙️ ScamShield Settings</h3>
+        <button id="closeModalBtn" class="btn-close">✕</button>
+      </div>
+      <div class="modal-content">
+        <label for="geminiApiKeyInput">Google Gemini API Key (Optional):</label>
+        <input type="password" id="geminiApiKeyInput" placeholder="AIzaSy... (Leave empty for Fast Demo Mode)">
+        <p class="modal-note">Saved privately in your browser. Leave blank to use built-in smart offline demo.</p>
+      </div>
+      <div class="modal-actions">
+        <button id="saveSettingsBtn" class="btn-primary">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toastNotification" class="toast-notice" style="display: none;">
+    <span id="toastIcon">⚡</span>
+    <span id="toastMessage">Sample loaded</span>
+  </div>
+
+  <script src="js/mockData.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/textShield.js"></script>
+  <script src="js/callShield.js"></script>
+  <script src="js/imageShield.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
